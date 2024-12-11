@@ -1,3 +1,5 @@
+package Database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -9,7 +11,7 @@ public class MySQL_db implements AutoCloseable {
     public PreparedStatement statement;
     public ResultSet result;
 
-    MySQL_db(){
+    public MySQL_db(){
         try{
             String url = "jdbc:mysql://localhost:3306/hospital_management_system";
             String user = "root";
@@ -53,11 +55,11 @@ public class MySQL_db implements AutoCloseable {
         statement = MySqlConnection.prepareStatement(query);
     }
 
-    public void ExecuteUpdate() throws SQLException{
+    public void QueryUpdate() throws SQLException{
         statement.executeUpdate();
     }
 
-    public void ExecuteQuery() throws SQLException{
+    public void QueryResult() throws SQLException{
         result = statement.executeQuery();
     }
 }
