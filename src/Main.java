@@ -1,5 +1,6 @@
 import Database.MySQL_db;
 import Hotel.*;
+import Menu.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,15 +14,8 @@ public class Main {
             System.out.println(rooms.GetRoomNumber());
         }
 
-        /*try{
-            db.prepareStatement("SELECT * FROM staff");
-            db.ExecuteQuery();
+        Main_Menu main_menu = new Main_Menu();
+        main_menu.show();
 
-            while(db.result.next()){
-                System.out.println(db.result.getString("Name"));
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }*/
     }
 }

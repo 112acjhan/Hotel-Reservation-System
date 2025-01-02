@@ -1,15 +1,14 @@
 package Hotel;
-import Database.MySQL_db;
 import java.util.Date;
 
 public class Reservation {
     private int reservation_id;
-    private Guest guest;
+    private User guest;
     private Room room;
     private Date check_in_date;
     private Date check_out_date;
 
-    public Reservation(int reservation_id, Guest guest, Room room, Date check_in_date, Date check_out_date){
+    public Reservation(int reservation_id, User guest, Room room, Date check_in_date, Date check_out_date){
         this.reservation_id = reservation_id;
         this.guest = guest;
         this.room = room;

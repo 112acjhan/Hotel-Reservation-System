@@ -4,14 +4,20 @@ import java.sql.SQLException;
 import java.util.Date;
 import Database.MySQL_db;
 
-public class Guest {
-    private String name;
+public class User {
+    private int user_id;
+    public String name;
     private int IC;
     private String address;
     private String phoneNumber;
     private String email;
 
-    public Guest(String name, int IC, String address, String phoneNumber, String email){
+    public User(int user_id, String name){
+        this.user_id = user_id;
+        this.name = name;
+    }
+
+    public User(String name, int IC, String address, String phoneNumber, String email){
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;

@@ -13,7 +13,7 @@ public class MySQL_db implements AutoCloseable {
 
     public MySQL_db(){
         try{
-            String url = "jdbc:mysql://localhost:3306/hospital_management_system";
+            String url = "jdbc:mysql://localhost:3306/hotel_reservation_system";
             String user = "root";
             String password = "9556";
 
