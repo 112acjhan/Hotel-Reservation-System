@@ -72,8 +72,8 @@ public class Login_Menu implements ActionListener{
                         db.statement.setString(2, tf_password.getText());
                         db.QueryResult();
                         db.result.next();
-                        User user = new User(db.result.getInt("user_id"), db.result.getString("username"));
-                        System.out.println(user.name);
+                        User user = new User(db.result.getInt("user_id"), db.result.getString("username")
+                                ,db.result.getString("role"));
                         JOptionPane.showMessageDialog(login_frame, "Login Successfully!", "Login"
                                 , JOptionPane.INFORMATION_MESSAGE);
                     }

@@ -11,10 +11,12 @@ public class User {
     private String address;
     private String phoneNumber;
     private String email;
+    private String role;
 
-    public User(int user_id, String name){
+    public User(int user_id, String name, String role){
         this.user_id = user_id;
         this.name = name;
+        this.role = role;
     }
 
     public User(String name, int IC, String address, String phoneNumber, String email){
