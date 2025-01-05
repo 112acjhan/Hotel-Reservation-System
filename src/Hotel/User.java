@@ -5,13 +5,13 @@ import java.util.Date;
 import Database.MySQL_db;
 
 public class User {
-    private int user_id;
+    public int user_id;
     public String name;
-    private int IC;
-    private String address;
-    private String phoneNumber;
-    private String email;
-    private String role;
+    public int IC;
+    public String address;
+    public String phoneNumber;
+    public String email;
+    public String role;
 
     public User(int user_id, String name, String role){
         this.user_id = user_id;

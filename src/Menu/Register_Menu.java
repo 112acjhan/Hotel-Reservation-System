@@ -22,7 +22,7 @@ public class Register_Menu implements ActionListener{
 
     public void show_Register_Menu(){
         register_frame.setLocationRelativeTo(null);
-        register_frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        register_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         register_frame.setVisible(true);
         register_frame.setLayout(new BorderLayout());
         register_frame.setSize(400,200);

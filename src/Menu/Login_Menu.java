@@ -76,6 +76,14 @@ public class Login_Menu implements ActionListener{
                                 ,db.result.getString("role"));
                         JOptionPane.showMessageDialog(login_frame, "Login Successfully!", "Login"
                                 , JOptionPane.INFORMATION_MESSAGE);
+
+                        if(db.result.getString("role").equals("customer")){
+                            login_frame.dispose();
+                            Customer_Menu customer_menu = new Customer_Menu();
+                            customer_menu.Show_CustomerMenu(user);
+                        } else if (db.result.getString("role").equals("admin")){
+
+                        }
                     }
                     else{
                         JOptionPane.showMessageDialog(login_frame, "Login Failed! Please check your username and password!"

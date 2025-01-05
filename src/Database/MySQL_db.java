@@ -51,15 +51,28 @@ public class MySQL_db implements AutoCloseable {
         }
     }
 
-    public void prepareStatement(String query) throws SQLException{
-        statement = MySqlConnection.prepareStatement(query);
+    public void prepareStatement(String query){
+        try
+        {
+            statement = MySqlConnection.prepareStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void QueryUpdate() throws SQLException{
-        statement.executeUpdate();
+    public void QueryUpdate(){
+        try {
+            statement.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
-    public void QueryResult() throws SQLException{
-        result = statement.executeQuery();
+    public void QueryResult(){
+        try {
+            result = statement.executeQuery();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }
