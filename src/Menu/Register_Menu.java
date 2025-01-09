@@ -1,7 +1,5 @@
 package Menu;
 import Database.MySQL_db;
-import Hotel.User;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -67,8 +65,10 @@ public class Register_Menu implements ActionListener{
 
                     db.prepareStatement("INSERT INTO user (user_id, username, password, role) VALUES (?,?,?,'customer')");
                     db.statement.setInt(1, new_user_id);
-                    db.statement.setString(2, tf_username.getText());
-                    db.statement.setString(3, tf_password.getText());
+                    if(tf_username.getText().isEmpty()){throw new Exception("Username cannot be empty");}
+                    else{db.statement.setString(2, tf_username.getText());}
+                    if(tf_password.getText().isEmpty()){throw new Exception("Password cannot be empty");}
+                    else{db.statement.setString(3, tf_password.getText());}
                     db.QueryUpdate();
 
                     JOptionPane.showMessageDialog(register_frame, "Register Successfully!", "Register"
@@ -82,10 +82,13 @@ public class Register_Menu implements ActionListener{
                     JOptionPane.showMessageDialog(register_frame, "Register Failed! Please make sure to fill all the column!"
                             , "Register"
                             , JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e){
+                    JOptionPane.showMessageDialog(register_frame, e.getMessage()
+                            , "Register"
+                            , JOptionPane.ERROR_MESSAGE);
                 }
                 break;
             case "Back":
-                System.out.println("Register");
                 register_frame.dispose();
                 Main_Menu main_menu = new Main_Menu();
                 main_menu.show();

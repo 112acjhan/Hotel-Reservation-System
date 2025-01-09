@@ -26,7 +26,7 @@ public class User {
         this.email = email;
     }
 
-    public Reservation Book_Room(Room room, Date check_in_date, Date check_out_date){
+    /*public Reservation Book_Room(Room room, Date check_in_date, Date check_out_date){
         MySQL_db db = new MySQL_db();
 
         if (room.CheckAvailability()){
@@ -45,7 +45,7 @@ public class User {
         }else {
             System.out.println("Room is not available.");
         } return null;
-    }
+    }*/
 
     public void Check_In(){
 
