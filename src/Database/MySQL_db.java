@@ -15,7 +15,7 @@ public class MySQL_db implements AutoCloseable {
         try{
             String url = "jdbc:mysql://localhost:3306/hotel_reservation_system";
             String user = "root";
-            String password = "9556";
+            String password = "";
 
             MySqlConnection = DriverManager.getConnection(url, user, password);
             statement = null;
