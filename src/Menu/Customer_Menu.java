@@ -6,12 +6,17 @@ import Payment.Bank_Payment;
 import Payment.Cash_Payment;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -197,7 +202,8 @@ public class Customer_Menu implements ActionListener {
                             Cash_Payment cash_payment = new Cash_Payment(
                                     global_customer.user_id,
                                     hotel.GetRoom(room_number_list.getSelectedIndex()).GetRoomId(),
-                                    hotel.GetRoom(room_number_list.getSelectedIndex()).GetPrice());
+                                    price
+                            );
 
                             if(reservation.Make_Reservation(cash_payment)){
                                 JOptionPane.showMessageDialog(f_hotel_reserve_menu, "Reserved Successfully!"
@@ -214,7 +220,8 @@ public class Customer_Menu implements ActionListener {
                             Bank_Payment back_payment = new Bank_Payment(
                                     global_customer.user_id,
                                     hotel.GetRoom(room_number_list.getSelectedIndex()).GetRoomId(),
-                                    hotel.GetRoom(room_number_list.getSelectedIndex()).GetPrice());
+                                    price
+                            );
 
                             if(reservation.Make_Reservation(back_payment)){
                                 JOptionPane.showMessageDialog(f_hotel_reserve_menu, "Reserved Successfully!"
@@ -230,6 +237,58 @@ public class Customer_Menu implements ActionListener {
                         }
                     }
                 }
+            }
+        });
+
+        // Document event
+        tf_checkInDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+            }
+        });
+        tf_checkOutDate.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+
+                p_receipt_info.removeAll();
+                p_receipt_info.add(new JLabel("Room Number: "));
+                p_receipt_info.add(new JLabel(room_number_list.getSelectedItem().toString()));
+                p_receipt_info.add(new JLabel("Price: "));
+                p_receipt_info.add(new JLabel(String.valueOf(price)));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+
+                p_receipt_info.removeAll();
+                p_receipt_info.add(new JLabel("Room Number: "));
+                p_receipt_info.add(new JLabel(room_number_list.getSelectedItem().toString()));
+                p_receipt_info.add(new JLabel("Price: "));
+                p_receipt_info.add(new JLabel(String.valueOf(price)));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent documentEvent) {
+                price = price * calculateDayDiff(tf_checkInDate.getText(), tf_checkOutDate.getText());
+
+                p_receipt_info.removeAll();
+                p_receipt_info.add(new JLabel("Room Number: "));
+                p_receipt_info.add(new JLabel(room_number_list.getSelectedItem().toString()));
+                p_receipt_info.add(new JLabel("Price: "));
+                p_receipt_info.add(new JLabel(String.valueOf(price)));
             }
         });
 
@@ -320,6 +379,8 @@ public class Customer_Menu implements ActionListener {
                         p_receipt_info.repaint();
                     }
                     else{
+                        tf_checkInDate.setText("");
+                        tf_checkOutDate.setText("");
                         payment_method_list.setSelectedIndex(0);
                         price = 0;
                         p_receipt_info.removeAll();
@@ -342,6 +403,7 @@ public class Customer_Menu implements ActionListener {
                 }
             }
         });
+
     }
 
     public void Show_cancel_menu(){
@@ -476,8 +538,18 @@ public class Customer_Menu implements ActionListener {
                     if(room_number_list.getSelectedIndex()!= 0){
                         // Get date data
                         try {
-                            l_amount_info.setText(
-                                    Double.toString(hotel.GetRoom(room_number_list.getSelectedIndex()).GetPrice()));
+                            db.prepareStatement("SELECT payment_id FROM payment WHERE user_id = ? AND room_id = ? ORDER BY payment_id DESC LIMIT 1;");
+                            db.statement.setInt(1, global_customer.user_id);
+                            db.statement.setInt(2, hotel.GetRoom(room_number_list.getSelectedIndex()).GetRoomId());
+                            db.QueryResult();
+                            db.result.next();
+                            int payment_id = db.result.getInt("payment_id");
+
+                            db.prepareStatement("SELECT amount FROM payment WHERE payment_id = ?");
+                            db.statement.setInt(1, payment_id);
+                            db.QueryResult();
+                            db.result.next();
+                            l_amount_info.setText(String.valueOf(db.result.getDouble("amount")));
 
                             db.prepareStatement("SELECT * FROM reservation WHERE user_id = ? AND room_id = ?");
                             db.statement.setInt(1, global_customer.user_id);
@@ -488,6 +560,7 @@ public class Customer_Menu implements ActionListener {
                             l_checkOutDate_info.setText(db.result.getString("checkOut_date"));
                         } catch (SQLException e){
                             System.out.println("Something wrong when retrieving data from reservation table!");
+                            e.printStackTrace();
                         }
                     }
                     else {
@@ -535,5 +608,20 @@ public class Customer_Menu implements ActionListener {
                 Show_CustomerMenu(global_customer);
                 break;
         }
+    }
+
+    private int calculateDayDiff(String checkInDateStr, String checkOutDateStr){
+        try {
+            LocalDate checkInDate = LocalDate.parse(checkInDateStr);
+            LocalDate checkOutDate = LocalDate.parse(checkOutDateStr);
+
+            if (checkOutDate.isAfter(checkInDate)) {
+                int diffInDays = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
+                return diffInDays;
+            }
+        } catch (DateTimeParseException e) {
+            return 1;
+        }
+        return 1;
     }
 }
